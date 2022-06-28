@@ -65,7 +65,7 @@ const float MINIMUM_COLLISION_DISTANCE = 0.5f;
 float ball_x = 0.0f,
 ball_y = 0.0f;
 float player_speed = 2.5f;
-float ball_speed = 1.0f;
+float ball_speed = 2.0f;
 bool start; // flag to start/restart game
 float previous_ticks = 0.0f;
 
