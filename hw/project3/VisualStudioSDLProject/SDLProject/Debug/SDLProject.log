@@ -1,0 +1,4 @@
+﻿  Entity.cpp
+E:\NYU\Summer2022\CS3113\hw\project3\VisualStudioSDLProject\SDLProject\Entity.h(75,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\hw\project3\VisualStudioSDLProject\SDLProject\Entity.h(76,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+  SDLProject.vcxproj -> E:\NYU\Summer2022\CS3113\hw\project3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
