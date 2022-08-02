@@ -130,12 +130,15 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="sprite.hpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="glew32.dll">
@@ -146,6 +149,12 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DeploymentContent>
       <FileType>Document</FileType>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\win.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\geralt.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
