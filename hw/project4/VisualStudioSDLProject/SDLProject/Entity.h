@@ -16,7 +16,6 @@ private:
     int *animation_left  = NULL; // move to the left
     int *animation_up    = NULL; // move upwards
     int *animation_down  = NULL; // move downwards
-    int* animation_buffer = NULL; // any sort of buffer
     
     glm::vec3 position;
     glm::vec3 velocity;
@@ -46,7 +45,6 @@ public:
     
     // Animating
     int **walking          = new int*[4] { animation_left, animation_right, animation_up, animation_down };
-    int** others = new int* [4]{ animation_buffer };
     int *animation_indices = NULL;
     int animation_frames   = 0;
     int animation_index    = 0;

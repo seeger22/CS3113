@@ -24,6 +24,10 @@
 #include "Entity.h"
 #include "Map.h"
 
+#include <stdlib.h> // for srand
+#include <time.h> // for time
+#include <string.h> // for converting double to string to display time
+
 /**
  STRUCTS AND ENUMS
  */
@@ -38,7 +42,8 @@ struct GameState
     Mix_Chunk *jump_sfx;
     Mix_Chunk* win_sfx;
     Mix_Chunk* lose_sfx;
-    Mix_Chunk* dash_sfx;
+    Mix_Chunk* dash_sfx_1;
+    Mix_Chunk* dash_sfx_2;
     Mix_Chunk* shield_sfx;
 };
 
@@ -86,6 +91,7 @@ GameState state;
 SDL_Window* display_window;
 bool game_is_running = true; // for global flags
 bool game_over = false; // for local render flags
+bool game_reset = false;
 
 ShaderProgram program;
 glm::mat4 view_matrix, projection_matrix;
@@ -93,6 +99,9 @@ glm::mat4 view_matrix, projection_matrix;
 float previous_ticks = 0.0f;
 float accumulator = 0.0f;
 const int FONTBANK_SIZE = 16;
+
+std::clock_t start;
+double duration;
 
 /**
  GENERAL FUNCTIONS
@@ -192,8 +201,10 @@ void DrawText(ShaderProgram* program, GLuint font_texture_id, std::string text, 
 
 void initialise()
 {
+    srand(time(NULL)); // random var
+
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    display_window = SDL_CreateWindow("Hello, AI!",
+    display_window = SDL_CreateWindow("YUH",
                                       SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                       WINDOW_WIDTH, WINDOW_HEIGHT,
                                       SDL_WINDOW_OPENGL);
@@ -338,9 +349,12 @@ void initialise()
     state.jump_sfx = Mix_LoadWAV("assets/grunt.wav");
     state.win_sfx = Mix_LoadWAV("assets/win.wav");
     state.lose_sfx = Mix_LoadWAV("assets/lose.wav");
-    state.dash_sfx = Mix_LoadWAV("assets/dash.wav");
+    state.dash_sfx_1 = Mix_LoadWAV("assets/dash.wav");
+    state.dash_sfx_2 = Mix_LoadWAV("assets/dash2.wav");
     state.shield_sfx = Mix_LoadWAV("assets/shield.wav");
     
+    start = std::clock();
+
     // enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -379,9 +393,13 @@ void process_input()
                     case SDLK_e:
                         // Dash Attack
                         state.player->is_dashing = true;
-                        Mix_PlayChannel(-1, state.dash_sfx, 0);
+                        Mix_PlayChannel(-1, ((rand() % 100) < 50) ? state.dash_sfx_1 : state.dash_sfx_2, 0);
                         state.player->animation_indices = state.player->walking[state.player->DOWN];
                         break;
+
+                    case SDLK_r:
+                        // reset
+                        game_reset = true;
                     default:
                         break;
                 }
@@ -471,10 +489,12 @@ void render()
     else if (state.player->get_threat_count() == 0) {
         DrawText(&program, font_texture_id, "YUH", 1.0f, -0.5f, glm::vec3(state.player->get_position().x - 0.7f, 2.0f, 0.0f));
         if (!game_over) {
+            duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
             Mix_PauseMusic();
             Mix_PlayChannel(-1, state.win_sfx, 0);
             game_over = true;
         }
+        DrawText(&program, font_texture_id, std::to_string(duration), 1.0f, -0.5f, glm::vec3(state.player->get_position().x - 0.7f, 1.4f, 0.0f));
     }
     SDL_GL_SwapWindow(display_window);
 }
@@ -486,6 +506,9 @@ void shutdown()
     delete [] state.enemies;
     delete    state.player;
     delete    state.map;
+    Mix_FreeChunk(state.shield_sfx);
+    Mix_FreeChunk(state.dash_sfx_1);
+    Mix_FreeChunk(state.dash_sfx_2);
     Mix_FreeChunk(state.win_sfx);
     Mix_FreeChunk(state.lose_sfx);
     Mix_FreeChunk(state.jump_sfx);
@@ -498,9 +521,12 @@ void shutdown()
 int main(int argc, char* argv[])
 {
     initialise();
-    
     while (game_is_running)
     {
+        if (game_reset) {
+            game_reset = false;
+            // initialise(); // bad
+        }
         process_input();
         update();
         render();

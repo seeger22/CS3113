@@ -1,6 +1,7 @@
 ﻿  main.cpp
-E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(110,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
-E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(111,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
-E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\main.cpp(145,23): warning C4018: '<': signed/unsigned mismatch
-E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\main.cpp(336,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  SDLProject.vcxproj -> E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+E:\NYU\Summer2022\CS3113\hw\project4\VisualStudioSDLProject\SDLProject\Entity.h(108,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\hw\project4\VisualStudioSDLProject\SDLProject\Entity.h(109,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\hw\project4\VisualStudioSDLProject\SDLProject\main.cpp(154,23): warning C4018: '<': signed/unsigned mismatch
+E:\NYU\Summer2022\CS3113\hw\project4\VisualStudioSDLProject\SDLProject\main.cpp(204,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\NYU\Summer2022\CS3113\hw\project4\VisualStudioSDLProject\SDLProject\main.cpp(347,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  SDLProject.vcxproj -> E:\NYU\Summer2022\CS3113\hw\project4\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

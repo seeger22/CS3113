@@ -32,8 +32,6 @@ Entity::~Entity()
     delete [] animation_left;
     delete [] animation_right;
     delete [] walking;
-    delete[] animation_buffer;
-    delete[] others;
 }
 
 void Entity::draw_sprite_from_texture_atlas(ShaderProgram *program, GLuint texture_id, int index)
