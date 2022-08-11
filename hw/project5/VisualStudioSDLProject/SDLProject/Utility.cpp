@@ -9,6 +9,8 @@
 #include <SDL_image.h>
 #include "stb_image.h"
 
+const char FONT_FILEPATH[] = "assets/font1.png";
+
 GLuint Utility::load_texture(const char* filepath) {
     // STEP 1: Loading the image file
     int width, height, number_of_components;
@@ -40,8 +42,9 @@ GLuint Utility::load_texture(const char* filepath) {
     return texture_id;
 }
 
-void Utility::draw_text(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position)
+void Utility::draw_text(ShaderProgram *program, std::string text, float screen_size, float spacing, glm::vec3 position)
 {
+    GLuint font_texture_id = load_texture(FONT_FILEPATH);
     // Scale the size of the fontbank in the UV-plane
     // We will use this for spacing and positioning
     float width = 1.0f / FONTBANK_SIZE;

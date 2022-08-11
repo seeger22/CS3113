@@ -22,8 +22,13 @@ struct GameState
     Entity *player;
     Entity *enemies;
     
-    Mix_Music *bgm;
-    Mix_Chunk *jump_sfx;
+    Mix_Music* bgm;
+    Mix_Chunk* jump_sfx;
+    Mix_Chunk* win_sfx;
+    Mix_Chunk* lose_sfx;
+    Mix_Chunk* dash_sfx_1;
+    Mix_Chunk* dash_sfx_2;
+    Mix_Chunk* shield_sfx;
     
     int next_scene_id;
 };

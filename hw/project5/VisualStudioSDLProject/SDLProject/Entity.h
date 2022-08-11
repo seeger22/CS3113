@@ -2,8 +2,8 @@
 #include "Map.h"
 
 enum EntityType { PLATFORM, PLAYER, ENEMY  };
-enum AIType     { WALKER, GUARD            };
-enum AIState    { WALKING, IDLE, ATTACKING };
+enum AIType     { WALKER, GUARD, EKIMMARA, WYVERN  };
+enum AIState    { WALKING, IDLE, BUFFER, ATTACKING, ENGAGING };
 
 class Entity
 {
@@ -24,6 +24,9 @@ private:
     
     float width  = 0.8f;
     float height = 0.8f;
+
+    bool invincible = false;
+    int threat_count;
     
 public:
     // Static attributes
@@ -53,6 +56,16 @@ public:
     // Jumping
     bool is_jumping     = false;
     float jumping_power = 0;
+
+    // Dashing
+    bool is_dashing     = false;
+    float dashing_speed = 0;
+
+    //Sheilding
+    bool is_shielding = false;
+
+    // Additional
+    bool is_still = true;
     
     // Colliding
     bool collided_top    = false;
@@ -70,6 +83,8 @@ public:
     void activate_ai(Entity *player);
     void ai_walker();
     void ai_guard(Entity *player);
+    void ai_ekimmara(Entity *player);
+    void ai_wyvern(Entity* player);
     
     void const check_collision_y(Entity *collidable_entities, int collidable_entity_count);
     void const check_collision_x(Entity *collidable_entities, int collidable_entity_count);
@@ -77,6 +92,9 @@ public:
     void const check_collision_x(Map *map);
     
     bool const check_collision(Entity *other) const;
+
+    void clear_bools();
+
     
     void activate()   { is_active = true;  };
     void deactivate() { is_active = false; };
@@ -89,7 +107,9 @@ public:
     glm::vec3  const get_velocity()     const { return velocity;     };
     glm::vec3  const get_acceleration() const { return acceleration; };
     int        const get_width()        const { return width;        };
-    int        const get_height()       const { return height;       };
+    int        const get_height()       const { return height; };
+    bool       const get_active_state() const { return is_active; };
+    int        const get_threat_count() const { return threat_count; };
     
     void const set_entity_type(EntityType new_entity_type)  { entity_type  = new_entity_type;      };
     void const set_ai_type(AIType new_ai_type)              { ai_type      = new_ai_type;          };
@@ -100,4 +120,5 @@ public:
     void const set_acceleration(glm::vec3 new_acceleration) { acceleration = new_acceleration;     };
     void const set_width(float new_width)                   { width        = new_width;            };
     void const set_height(float new_height)                 { height       = new_height;           };
+    void const set_threat_count(int new_threats) { threat_count = new_threats; };
 };

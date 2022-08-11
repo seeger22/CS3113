@@ -23,6 +23,13 @@
 #include "Utility.h"
 #include "Scene.h"
 #include "LevelA.h"
+#include "LevelB.h"
+#include "LevelC.h"
+#include "Level_W.h"
+#include "Level_M.h"
+#include "Level_F.h"
+
+
 
 /**
  CONSTANTS
@@ -50,9 +57,15 @@ const float MILLISECONDS_IN_SECOND = 1000.0;
  */
 Scene *current_scene;
 LevelA *level_a;
+LevelB* level_b;
+LevelC* level_c;
+Level_W* level_win;
+Level_F* level_fail;
+Level_M* level_menu;
 
 SDL_Window* display_window;
 bool game_is_running = true;
+int lives = 3;
 
 ShaderProgram program;
 glm::mat4 view_matrix, projection_matrix;
@@ -95,8 +108,13 @@ void initialise()
     
     glClearColor(BG_RED, BG_BLUE, BG_GREEN, BG_OPACITY);
     
+    level_menu = new Level_M();
     level_a = new LevelA();
-    switch_to_scene(level_a);
+    level_b = new LevelB();
+    level_c = new LevelC();
+    level_win = new Level_W();
+    level_fail = new Level_F();
+    switch_to_scene(level_menu);
     
     // enable blending
     glEnable(GL_BLEND);
@@ -125,7 +143,7 @@ void process_input()
                         game_is_running = false;
                         break;
                         
-                    case SDLK_SPACE:
+                    case SDLK_w:
                         // Jump
                         if (current_scene->state.player->collided_bottom)
                         {
@@ -133,7 +151,14 @@ void process_input()
                             Mix_PlayChannel(-1, current_scene->state.jump_sfx, 0);
                         }
                         break;
-                        
+                    case SDLK_e:
+                        // Dash Attack
+                        current_scene->state.player->is_dashing = true;
+                        Mix_PlayChannel(-1, ((rand() % 100) < 50) ? current_scene->state.dash_sfx_1 : current_scene->state.dash_sfx_2, 0);
+                        current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->DOWN];
+                        break;
+                    case SDLK_RETURN:
+                        switch_to_scene(level_a);
                     default:
                         break;
                 }
@@ -145,15 +170,21 @@ void process_input()
     
     const Uint8 *key_state = SDL_GetKeyboardState(NULL);
 
-    if (key_state[SDL_SCANCODE_LEFT])
+    if (key_state[SDL_SCANCODE_A])
     {
         current_scene->state.player->movement.x = -1.0f;
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
     }
-    else if (key_state[SDL_SCANCODE_RIGHT])
+    else if (key_state[SDL_SCANCODE_D])
     {
         current_scene->state.player->movement.x = 1.0f;
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->RIGHT];
+    }
+    if (key_state[SDL_SCANCODE_SPACE])
+    {
+        current_scene->state.player->is_shielding = true;
+        Mix_PlayChannel(-1, current_scene->state.shield_sfx, 0);
+        current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->UP];
     }
     
     if (glm::length(current_scene->state.player->movement) > 1.0f)
@@ -202,6 +233,30 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT);
     
     current_scene->render(&program);
+
+    if (!current_scene->state.player->get_active_state())
+    {
+        lives -= 1;
+        if (lives != 0)
+            switch_to_scene(level_a);
+        else switch_to_scene(level_fail);
+    }
+    else if (current_scene->state.player->get_threat_count() == 0)
+    {
+        switch (current_scene->state.next_scene_id)
+        {
+        case 2:
+            switch_to_scene(level_b);
+            break;
+        case 3:
+            switch_to_scene(level_c);
+            break;
+        case 4:
+            switch_to_scene(level_win);
+        default:
+            break;
+        }
+    }
     
     SDL_GL_SwapWindow(display_window);
 }
@@ -211,6 +266,8 @@ void shutdown()
     SDL_Quit();
     
     delete level_a;
+    delete level_b;
+    delete level_c;
 }
 
 /**

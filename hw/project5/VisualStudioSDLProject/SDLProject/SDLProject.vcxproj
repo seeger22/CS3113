@@ -130,6 +130,11 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="LevelA.cpp" />
+    <ClCompile Include="LevelB.cpp" />
+    <ClCompile Include="LevelC.cpp" />
+    <ClCompile Include="Level_F.cpp" />
+    <ClCompile Include="Level_M.cpp" />
+    <ClCompile Include="Level_W.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -139,7 +144,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="LevelB.h" />
     <ClInclude Include="LevelA.h" />
+    <ClInclude Include="LevelC.h" />
+    <ClInclude Include="Level_F.h" />
+    <ClInclude Include="Level_M.h" />
+    <ClInclude Include="Level_W.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
