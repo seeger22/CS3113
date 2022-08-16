@@ -1,8 +1,9 @@
+#pragma once
 #include "Map.h"
 
 enum EntityType { PLATFORM, PLAYER, ENEMY  };
-enum AIType     { WALKER, GUARD, EKIMMARA, WYVERN  };
-enum AIState    { WALKING, IDLE, BUFFER, ATTACKING, ENGAGING };
+enum AIType     { WALKER, GUARD            };
+enum AIState    { WALKING, IDLE, ATTACKING };
 
 class Entity
 {
@@ -16,7 +17,6 @@ private:
     int *animation_left  = NULL; // move to the left
     int *animation_up    = NULL; // move upwards
     int *animation_down  = NULL; // move downwards
-    int* animation_buffer = NULL; // any sort of buffer
     
     glm::vec3 position;
     glm::vec3 velocity;
@@ -25,8 +25,9 @@ private:
     float width  = 0.8f;
     float height = 0.8f;
 
-    bool invincible = false;
-    int threat_count;
+    // stats
+    int health = 100;
+    int attack_strength = 100;
     
 public:
     // Static attributes
@@ -46,7 +47,6 @@ public:
     
     // Animating
     int **walking          = new int*[4] { animation_left, animation_right, animation_up, animation_down };
-    int** others = new int* [4]{ animation_buffer };
     int *animation_indices = NULL;
     int animation_frames   = 0;
     int animation_index    = 0;
@@ -57,22 +57,16 @@ public:
     // Jumping
     bool is_jumping     = false;
     float jumping_power = 0;
-
-    // Dashing
-    bool is_dashing     = false;
-    float dashing_speed = 0;
-
-    //Sheilding
-    bool is_shielding = false;
-
-    // Additional
-    bool is_still = true;
     
     // Colliding
     bool collided_top    = false;
     bool collided_bottom = false;
     bool collided_left   = false;
     bool collided_right  = false;
+
+    // Attacking
+    bool is_attacking = false;
+    float attack_range = 0.25f;
 
     // Methods
     Entity();
@@ -84,22 +78,22 @@ public:
     void activate_ai(Entity *player);
     void ai_walker();
     void ai_guard(Entity *player);
-    void ai_ekimmara(Entity *player);
-    void ai_wyvern(Entity* player);
+
+    // Damage related
+    void take_damage(int damage_amount);
     
+    void const check_attack_collision(Entity* collidable_entities, int collidable_entity_count, glm::vec3 hit_point);
     void const check_collision_y(Entity *collidable_entities, int collidable_entity_count);
     void const check_collision_x(Entity *collidable_entities, int collidable_entity_count);
     void const check_collision_y(Map *map);
     void const check_collision_x(Map *map);
     
     bool const check_collision(Entity *other) const;
-
-    void clear_bools();
-
     
     void activate()   { is_active = true;  };
     void deactivate() { is_active = false; };
     
+    bool const get_active_state() const { return is_active; };
     EntityType const get_entity_type()  const { return entity_type;  };
     AIType     const get_ai_type()      const { return ai_type;      };
     AIState    const get_ai_state()     const { return ai_state;     };
@@ -108,9 +102,10 @@ public:
     glm::vec3  const get_velocity()     const { return velocity;     };
     glm::vec3  const get_acceleration() const { return acceleration; };
     int        const get_width()        const { return width;        };
-    int        const get_height()       const { return height; };
-    bool       const get_active_state() const { return is_active; };
-    int        const get_threat_count() const { return threat_count; };
+    int        const get_height()       const { return height;       };
+
+    int const get_health() const { return health; }
+    int const get_attack_strength() const { return attack_strength; };
     
     void const set_entity_type(EntityType new_entity_type)  { entity_type  = new_entity_type;      };
     void const set_ai_type(AIType new_ai_type)              { ai_type      = new_ai_type;          };
@@ -121,5 +116,7 @@ public:
     void const set_acceleration(glm::vec3 new_acceleration) { acceleration = new_acceleration;     };
     void const set_width(float new_width)                   { width        = new_width;            };
     void const set_height(float new_height)                 { height       = new_height;           };
-    void const set_threat_count(int new_threats) { threat_count = new_threats; };
+    void const set_health(float new_health) { health = new_health; };
+    void const set_attack_strength(int new_strength) { attack_strength = new_strength; };
+    void const set_attack_range(float new_range) { attack_range = new_range; };
 };
