@@ -134,26 +134,6 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     
     if (entity_type == ENEMY) activate_ai(player);
     
-    if (animation_indices != NULL)
-    {
-        if (glm::length(movement) != 0)
-        {
-            animation_time += delta_time;
-            float frames_per_second = (float) 1 / SECONDS_PER_FRAME;
-            
-            if (animation_time >= frames_per_second)
-            {
-                animation_time = 0.0f;
-                animation_index++;
-                
-                if (animation_index >= animation_frames)
-                {
-                    animation_index = 0;
-                }
-            }
-        }
-    }
-    
     // Our character moves from left to right, so they need an initial velocity
     velocity.x = movement.x * speed;
     velocity.y = movement.y * speed;
@@ -198,6 +178,27 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     
     model_matrix = glm::mat4(1.0f);
     model_matrix = glm::translate(model_matrix, position);
+
+    // Animations
+    if (animation_indices != NULL)
+    {
+        if (glm::length(movement) != 0)
+        {
+            animation_time += delta_time;
+            float frames_per_second = (float)1 / SECONDS_PER_FRAME;
+
+            if (animation_time >= frames_per_second)
+            {
+                animation_time = 0.0f;
+                animation_index++;
+
+                if (animation_index >= animation_frames)
+                {
+                    animation_index = 0;
+                }
+            }
+        }
+    }
 }
 
 void const Entity::check_attack_collision(Entity* collidable_entities, int collidable_entity_count, glm::vec3 hit_point)

@@ -1,6 +1,5 @@
-﻿  LevelA.cpp
+﻿  Entity.cpp
 E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(104,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
 E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(105,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
 E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\LevelA.cpp(87,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   SDLProject.vcxproj -> E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

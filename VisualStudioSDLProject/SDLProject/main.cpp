@@ -151,6 +151,7 @@ void process_input()
     {
         current_scene->state.player->movement.x = 1.0f;
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->RIGHT];
+        if (current_scene->state.player->is_attacking) current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
     }
     if (key_state[SDL_SCANCODE_W])
     {
