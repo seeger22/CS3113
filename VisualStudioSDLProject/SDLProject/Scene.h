@@ -21,17 +21,19 @@ struct GameState
     Map *map;
     Entity *player;
     Entity *enemies;
+    Entity* npc = NULL;
     
     Mix_Music *bgm;
     Mix_Chunk *jump_sfx;
-    
-    int next_scene_id;
 };
 
 class Scene {
 public:
+    int next_scene_id;
+    int dialogue_count = 99; // ADDITION: need another way to distinguish this. this is bad
     int number_of_enemies = 1;
     bool cutscene = false;
+    bool completed = false; // flag to show level has completed, immediately switch to next
     
     GameState state;
     

@@ -1,7 +1,7 @@
 #pragma once
 #include "Map.h"
 
-enum EntityType { PLATFORM, PLAYER, ENEMY  };
+enum EntityType { PLATFORM, PLAYER, ENEMY };
 enum AIType     { WALKER, GUARD            };
 enum AIState    { WALKING, IDLE, ATTACKING };
 
@@ -53,6 +53,7 @@ public:
     float animation_time   = 0.0f;
     int animation_cols     = 0;
     int animation_rows     = 0;
+    glm::vec3 orientation;
     
     // Jumping
     bool is_jumping     = false;
@@ -67,6 +68,11 @@ public:
     // Attacking
     bool is_attacking = false;
     float attack_range = 0.25f;
+    int attack_frame = 0;
+
+    // NPC stuff
+    bool hostile = true;
+    bool speaking = false; // ADDITION: need better way to distinguish this
 
     // Methods
     Entity();
@@ -119,4 +125,6 @@ public:
     void const set_health(float new_health) { health = new_health; };
     void const set_attack_strength(int new_strength) { attack_strength = new_strength; };
     void const set_attack_range(float new_range) { attack_range = new_range; };
+    void const set_orientation(glm::vec3 new_orientation) { orientation = new_orientation; };
+    void const set_hostile(bool new_hostile) { hostile = new_hostile; };
 };

@@ -118,11 +118,11 @@ void Entity::ai_guard(Entity *player)
 
 void Entity::take_damage(int damage_amount)
 {
-    // ADDITION?
-    health -= damage_amount;
+    // ADDITION? feels like !hostile == god
+    if (hostile) health -= damage_amount;
 }
 
-void Entity::update(float delta_time, Entity *player, Entity *objects, int object_count, Map *map)
+void Entity::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
 {
     if (health <= 0) { is_active = false; }
     if (!is_active) return;
@@ -148,31 +148,13 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     position.x += velocity.x * delta_time;
     check_collision_x(objects, object_count);
     check_collision_x(map);
-    
-    // Jump
-    if (is_jumping)
-    {
-        // STEP 1: Immediately return the flag to its original false state
-        is_jumping = false;
-        
-        // STEP 2: The player now acquires an upward velocity
-        velocity.y += jumping_power;
-    }
 
     if (is_attacking)
     {
-        is_attacking = false;
         glm::vec3 hit_point;
-        if (movement.x == 0 && movement.y == 0)
-        { // deafult hit to the right
-            hit_point.x = position.x + attack_range;
-            hit_point.y = position.y;
-        }
-        else
-        {
-            hit_point.x = position.x + attack_range * movement.x;
-            hit_point.y = position.y + attack_range * movement.y;
-        }
+        hit_point.x = position.x + attack_range * orientation.x;
+        hit_point.y = position.y + attack_range * orientation.y;
+        
         check_attack_collision(objects, object_count, hit_point);
     }
     
@@ -182,7 +164,7 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     // Animations
     if (animation_indices != NULL)
     {
-        if (glm::length(movement) != 0)
+        if (glm::length(movement) != 0 || is_attacking)
         {
             animation_time += delta_time;
             float frames_per_second = (float)1 / SECONDS_PER_FRAME;
@@ -194,6 +176,7 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
 
                 if (animation_index >= animation_frames)
                 {
+                    is_attacking = false;
                     animation_index = 0;
                 }
             }
@@ -227,6 +210,10 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
         
         if (check_collision(collidable_entity))
         {
+            if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && !collidable_entity->hostile) 
+            {
+                collidable_entity->speaking = true;
+            }
             float y_distance = fabs(position.y - collidable_entity->position.y);
             float y_overlap = fabs(y_distance - (height / 2.0f) - (collidable_entity->height / 2.0f));
             if (velocity.y > 0) {
@@ -250,6 +237,10 @@ void const Entity::check_collision_x(Entity *collidable_entities, int collidable
         
         if (check_collision(collidable_entity))
         {
+            if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && !collidable_entity->hostile)
+            {
+                collidable_entity->speaking = true;
+            }
             float x_distance = fabs(position.x - collidable_entity->position.x);
             float x_overlap = fabs(x_distance - (width / 2.0f) - (collidable_entity->width / 2.0f));
             if (velocity.x > 0) {

@@ -39,6 +39,7 @@ void LevelA::initialise()
     state.player->set_entity_type(PLAYER);
     state.player->set_position(glm::vec3(5.0f, 0.0f, 0.0f));
     state.player->set_movement(glm::vec3(0.0f));
+    state.player->set_orientation(glm::vec3(1.0f, 0.0f, 0.0f));
     state.player->speed = 2.5f;
     state.player->set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
     state.player->texture_id = Utility::load_texture("assets/george_0.png");

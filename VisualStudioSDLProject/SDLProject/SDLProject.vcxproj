@@ -133,6 +133,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="sceneA.cpp" />
+    <ClCompile Include="sceneB.cpp" />
+    <ClCompile Include="sceneC.cpp" />
+    <ClCompile Include="sceneD.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -142,6 +146,10 @@
     <ClInclude Include="LevelA.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="sceneA.h" />
+    <ClInclude Include="sceneB.h" />
+    <ClInclude Include="sceneC.h" />
+    <ClInclude Include="sceneD.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="sprite.hpp" />
     <ClInclude Include="Utility.h" />

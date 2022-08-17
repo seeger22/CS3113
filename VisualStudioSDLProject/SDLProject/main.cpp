@@ -23,6 +23,11 @@
 #include "Utility.h"
 #include "Scene.h"
 #include "LevelA.h"
+#include "sceneA.h"
+#include "sceneB.h"
+#include "sceneC.h"
+#include "sceneD.h"
+
 
 /**
  CONSTANTS
@@ -30,9 +35,9 @@
 const int WINDOW_WIDTH  = 640,
           WINDOW_HEIGHT = 480;
 
-const float BG_RED     = 0.1922f,
-            BG_BLUE    = 0.549f,
-            BG_GREEN   = 0.9059f,
+const float BG_RED     = 0.502f,
+            BG_BLUE    = 0.502f,
+            BG_GREEN   = 0.502f,
             BG_OPACITY = 1.0f;
 
 const int VIEWPORT_X = 0,
@@ -49,7 +54,11 @@ const float MILLISECONDS_IN_SECOND = 1000.0;
  VARIABLES
  */
 Scene *current_scene;
-LevelA *level_a;
+sceneA *scene_a;
+sceneB* scene_b;
+sceneC* scene_c;
+sceneD* scene_d;
+
 
 SDL_Window* display_window;
 bool game_is_running = true;
@@ -69,7 +78,7 @@ void switch_to_scene(Scene *scene)
 void initialise()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    display_window = SDL_CreateWindow("Hello, Scenes!",
+    display_window = SDL_CreateWindow(":D",
                                       SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                       WINDOW_WIDTH, WINDOW_HEIGHT,
                                       SDL_WINDOW_OPENGL);
@@ -95,8 +104,12 @@ void initialise()
     
     glClearColor(BG_RED, BG_BLUE, BG_GREEN, BG_OPACITY);
     
-    level_a = new LevelA();
-    switch_to_scene(level_a);
+    scene_a = new sceneA();
+    scene_b = new sceneB();
+    scene_c = new sceneC();
+    scene_d = new sceneD();
+
+    switch_to_scene(scene_a);
     
     // enable blending
     glEnable(GL_BLEND);
@@ -107,7 +120,6 @@ void process_input()
 {
     // VERY IMPORTANT: If nothing is pressed, we don't want to go anywhere
     current_scene->state.player->set_movement(glm::vec3(0.0f));
-    if (current_scene->cutscene) { (void)0; }
     
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -126,11 +138,29 @@ void process_input()
                         game_is_running = false;
                         break;
                         
-                    case SDLK_SPACE:
+                    case SDLK_j:
                         // Attack (direction depends on movement)
                         current_scene->state.player->is_attacking = true;
+                        current_scene->state.player->animation_index = 0;
                         break;
-                        
+                    case SDLK_RETURN: // ADDITION: better advancement system
+                        switch (current_scene->next_scene_id) {
+                        case 1:
+                            switch_to_scene(scene_b);
+                            break;
+                        case 3:
+                            //switch_to_scene(sceneE);
+                            break;
+                        case 6:
+                            //switch_to_scene(sceneH);
+                            break;
+                        default:
+                            break;
+                        }
+                    case SDLK_SPACE:
+                        if (current_scene->cutscene) current_scene->dialogue_count--;
+                        break;
+
                     default:
                         break;
                 }
@@ -145,22 +175,36 @@ void process_input()
     if (key_state[SDL_SCANCODE_A])
     {
         current_scene->state.player->movement.x = -1.0f;
+        current_scene->state.player->orientation.x = -1.0f;
+        current_scene->state.player->orientation.y = 0.0f;
+        // ADDITION: diagnal attacks needs to be fixed - orientation
+
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
     }
     else if (key_state[SDL_SCANCODE_D])
     {
         current_scene->state.player->movement.x = 1.0f;
+        current_scene->state.player->orientation.x = 1.0f;
+        current_scene->state.player->orientation.y = 0.0f;
+
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->RIGHT];
         if (current_scene->state.player->is_attacking) current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
     }
+
     if (key_state[SDL_SCANCODE_W])
     {
         current_scene->state.player->movement.y = 1.0f;
+        current_scene->state.player->orientation.x = 0.0f;
+        current_scene->state.player->orientation.y = 1.0f;
+
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->UP];
     }
     else if (key_state[SDL_SCANCODE_S])
     {
         current_scene->state.player->movement.y = -1.0f;
+        current_scene->state.player->orientation.x = 0.0f;
+        current_scene->state.player->orientation.y = -1.0f;
+
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->DOWN];
     }
     
@@ -168,6 +212,13 @@ void process_input()
     {
         current_scene->state.player->movement = glm::normalize(current_scene->state.player->movement);
     }
+    if (current_scene->cutscene)
+    {
+        current_scene->state.player->movement = glm::vec3(0.0f);
+        current_scene->state.player->is_attacking = false;// if currently in cutscene, don't allow movement
+    }
+    // if (current_scene->state.player->is_attacking) current_scene->state.player->movement = glm::vec3(0.0f);
+    // ADDITION: grounding the player when attacking could be a choice, but needs enemy knockback.
 }
 
 void update()
@@ -210,6 +261,26 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT);
     
     current_scene->render(&program);
+    if (current_scene->completed)
+    {
+        switch (current_scene->next_scene_id) {
+        case 2:
+            switch_to_scene(scene_c);
+            break;
+        case 3:
+            switch_to_scene(scene_d);
+            break;
+        case 5:
+            //switch_to_scene(scene_f);
+            break;
+        case 6:
+            //switch_to_scene(scene_g);
+            break;
+        case 8:
+            //switch_to_scene(scene_i);
+            break;
+        }
+    }
     
     SDL_GL_SwapWindow(display_window);
 }
@@ -218,7 +289,11 @@ void shutdown()
 {    
     SDL_Quit();
     
-    delete level_a;
+    delete scene_a;
+    delete scene_b;
+    delete scene_c;
+    delete scene_d;
+
 }
 
 /**
