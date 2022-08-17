@@ -137,6 +137,8 @@
     <ClCompile Include="sceneB.cpp" />
     <ClCompile Include="sceneC.cpp" />
     <ClCompile Include="sceneD.cpp" />
+    <ClCompile Include="sceneE.cpp" />
+    <ClCompile Include="sceneI.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -150,6 +152,8 @@
     <ClInclude Include="sceneB.h" />
     <ClInclude Include="sceneC.h" />
     <ClInclude Include="sceneD.h" />
+    <ClInclude Include="sceneE.h" />
+    <ClInclude Include="sceneI.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="sprite.hpp" />
     <ClInclude Include="Utility.h" />

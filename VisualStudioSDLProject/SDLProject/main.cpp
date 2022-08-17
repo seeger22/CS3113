@@ -27,6 +27,10 @@
 #include "sceneB.h"
 #include "sceneC.h"
 #include "sceneD.h"
+#include "sceneE.h"
+
+#include "sceneI.h"
+
 
 
 /**
@@ -58,6 +62,9 @@ sceneA *scene_a;
 sceneB* scene_b;
 sceneC* scene_c;
 sceneD* scene_d;
+sceneE* scene_e;
+
+sceneI* scene_i;
 
 
 SDL_Window* display_window;
@@ -108,6 +115,9 @@ void initialise()
     scene_b = new sceneB();
     scene_c = new sceneC();
     scene_d = new sceneD();
+    scene_e = new sceneE();
+
+    scene_i = new sceneI();
 
     switch_to_scene(scene_a);
     
@@ -148,15 +158,21 @@ void process_input()
                         case 1:
                             switch_to_scene(scene_b);
                             break;
-                        case 3:
-                            //switch_to_scene(sceneE);
+                        case 4:
+                            switch_to_scene(scene_e);
                             break;
-                        case 6:
-                            //switch_to_scene(sceneH);
+                        case 7:
+                            //switch_to_scene(scene_h);
                             break;
                         default:
                             break;
                         }
+                    case SDLK_y:
+                        if (current_scene->cutscene && current_scene->next_scene_id == 5 && current_scene->dialogue_count==2) {
+                            current_scene->state.player->decision = 1;
+                            switch_to_scene(scene_i);
+                        }
+                        break;
                     case SDLK_SPACE:
                         if (current_scene->cutscene) current_scene->dialogue_count--;
                         break;
@@ -293,6 +309,9 @@ void shutdown()
     delete scene_b;
     delete scene_c;
     delete scene_d;
+    delete scene_e;
+
+    delete scene_i;
 
 }
 

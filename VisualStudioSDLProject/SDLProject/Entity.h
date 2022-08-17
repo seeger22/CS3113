@@ -74,6 +74,14 @@ public:
     bool hostile = true;
     bool speaking = false; // ADDITION: need better way to distinguish this
 
+    // Decisions
+    int decision = 0;
+    /*
+    1 - ostrit 1500
+    2 - killed
+    3 - cured 3000
+    */
+
     // Methods
     Entity();
     ~Entity();
