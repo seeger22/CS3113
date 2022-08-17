@@ -35,6 +35,8 @@ public:
     bool cutscene = false;
     bool completed = false; // flag to show level has completed, immediately switch to next
     
+    int decision; // ADDITION: better way to do this
+
     GameState state;
     
     virtual void initialise() = 0;

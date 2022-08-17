@@ -85,7 +85,7 @@ void sceneI::render(ShaderProgram* program)
 {
     this->state.map->render(program);
     this->state.player->render(program);
-    switch (this->state.player->decision){
+    switch (decision){
     case 1:
         Utility::draw_text(program, "1500", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
         break;

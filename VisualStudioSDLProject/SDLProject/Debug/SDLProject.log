@@ -1,5 +1,45 @@
-﻿  main.cpp
+﻿  LevelA.cpp
 E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
 E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
 E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\LevelA.cpp(88,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Scene.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  main.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  sceneA.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\sceneA.cpp(76,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  sceneB.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\sceneB.cpp(89,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  sceneC.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\sceneC.cpp(90,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  sceneD.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\sceneD.cpp(76,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  sceneE.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\sceneE.cpp(90,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  sceneI.cpp
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(118,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(119,56): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Entity.h(133,56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\sceneI.cpp(76,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   SDLProject.vcxproj -> E:\NYU\Summer2022\CS3113\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

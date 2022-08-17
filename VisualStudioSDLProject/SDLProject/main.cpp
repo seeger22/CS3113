@@ -76,10 +76,11 @@ glm::mat4 view_matrix, projection_matrix;
 float previous_ticks = 0.0f;
 float accumulator = 0.0f;
 
-void switch_to_scene(Scene *scene)
+void switch_to_scene(Scene *scene, int decision=0)
 {
     current_scene = scene;
     current_scene->initialise();
+    if (decision) current_scene->decision = decision;
 }
 
 void initialise()
@@ -169,8 +170,7 @@ void process_input()
                         }
                     case SDLK_y:
                         if (current_scene->cutscene && current_scene->next_scene_id == 5 && current_scene->dialogue_count==2) {
-                            current_scene->state.player->decision = 1;
-                            switch_to_scene(scene_i);
+                            switch_to_scene(scene_i,1);
                         }
                         break;
                     case SDLK_SPACE:
