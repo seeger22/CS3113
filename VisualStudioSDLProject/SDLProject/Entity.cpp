@@ -31,6 +31,12 @@ Entity::~Entity()
     delete [] animation_left;
     delete [] animation_right;
     delete [] walking;
+
+    delete[] attacking_up;
+    delete[] attacking_down;
+    delete[] attacking_left;
+    delete[] attacking_right;
+    delete[] attacking;
 }
 
 void Entity::draw_sprite_from_texture_atlas(ShaderProgram *program, GLuint texture_id, int index)
@@ -82,7 +88,8 @@ void Entity::activate_ai(Entity *player)
         case GUARD:
             ai_guard(player);
             break;
-            
+        case STRIGA:
+            ai_striga(player);
         default:
             break;
     }
@@ -99,12 +106,17 @@ void Entity::ai_guard(Entity *player)
         case IDLE:
             
             break;
+        case BACK_AWAY:
+            if (position.x < 20) movement.x = 1.0f;
+            break;
             
         case WALKING:
             if (position.x > player->get_position().x) {
                 movement.x = -1.0f;
+                animation_indices = walking[LEFT];
             } else {
                 movement.x = 1.0f;
+                animation_indices = walking[RIGHT];
             }
             if (position.y > player->get_position().y) {
                 movement.y = - 1.0f;
@@ -122,10 +134,62 @@ void Entity::ai_guard(Entity *player)
     }
 }
 
+void Entity::ai_striga(Entity* player)
+{
+    switch (ai_state) {
+    case WALKING:
+        if (health <= 20) {
+            invincible == true;
+            ai_state = WEAK;
+        }
+        if (position.x > player->get_position().x) {
+            animation_indices = walking[LEFT];
+            movement.x = -1.0f;
+        }
+        else {
+            animation_indices = walking[RIGHT];
+            movement.x = 1.0f;
+        }
+        if (position.y > player->get_position().y) {
+            movement.y = -1.0f;
+        }
+        else {
+            movement.y = 1.0f;
+        }
+        break;
+    case WEAK:
+        animation_indices = walking[UP];
+        movement.x = -1.0f;
+        movement.y = 0.0f;
+        speed = 0.2f;
+        if (player->get_position().x > 7.0f) ai_state = ENRAGED;
+        break;
+    case ENRAGED:
+        invincible = false;
+        speed = 2.0f;
+        if (position.x > player->get_position().x) {
+            movement.x = -1.0f;
+        }
+        else {
+            movement.x = 1.0f;
+        }
+        if (position.y > player->get_position().y) {
+            movement.y = -1.0f;
+        }
+        else {
+            movement.y = 1.0f;
+        }
+        break;
+    }
+}
+
 void Entity::take_damage(int damage_amount)
 {
     // ADDITION? feels like !hostile == god
-    if (hostile) health -= damage_amount;
+    if (hostile && !invincible) 
+    {
+        health -= damage_amount;
+    }
 }
 
 void Entity::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
@@ -157,6 +221,7 @@ void Entity::update(float delta_time, Entity* player, Entity* objects, int objec
 
     if (is_attacking)
     {
+        is_attacking = false;
         glm::vec3 hit_point;
         hit_point.x = position.x + attack_range * orientation.x;
         hit_point.y = position.y + attack_range * orientation.y;
@@ -170,7 +235,7 @@ void Entity::update(float delta_time, Entity* player, Entity* objects, int objec
     // Animations
     if (animation_indices != NULL)
     {
-        if (glm::length(movement) != 0 || is_attacking)
+        if (glm::length(movement) != 0 || is_attacking_index)
         {
             animation_time += delta_time;
             float frames_per_second = (float)1 / SECONDS_PER_FRAME;
@@ -182,7 +247,7 @@ void Entity::update(float delta_time, Entity* player, Entity* objects, int objec
 
                 if (animation_index >= animation_frames)
                 {
-                    is_attacking = false;
+                    is_attacking_index = false;
                     animation_index = 0;
                 }
             }
@@ -202,7 +267,7 @@ void const Entity::check_attack_collision(Entity* collidable_entities, int colli
         float y_distance = fabs(hit_point.y - collidable_entity->position.y) - ((height + collidable_entity->height) / 2.0f);
         if (x_distance < 0.0f && y_distance < 0.0f)
         {
-            // ADDITION: A way to show has been hit?
+            // ADDITION: A way to show has been hit? knock back?
             collidable_entity->take_damage(attack_strength);
         }
     }
@@ -216,9 +281,13 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
         
         if (check_collision(collidable_entity))
         {
-            if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && !collidable_entity->hostile) 
+            if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && !collidable_entity->hostile) // if npc, start interaction
             {
                 collidable_entity->speaking = true;
+            }
+            else if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && collidable_entity->hostile) // if hostile enemy, gets damaged
+            {
+                take_damage(collidable_entity->attack_strength);
             }
             float y_distance = fabs(position.y - collidable_entity->position.y);
             float y_overlap = fabs(y_distance - (height / 2.0f) - (collidable_entity->height / 2.0f));
@@ -243,9 +312,13 @@ void const Entity::check_collision_x(Entity *collidable_entities, int collidable
         
         if (check_collision(collidable_entity))
         {
-            if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && !collidable_entity->hostile)
+            if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && !collidable_entity->hostile) // if npc, start interaction
             {
                 collidable_entity->speaking = true;
+            }
+            else if (entity_type == PLAYER && collidable_entity->entity_type == ENEMY && collidable_entity->hostile) // if hostile enemy, gets damaged
+            {
+                take_damage(collidable_entity->attack_strength);
             }
             float x_distance = fabs(position.x - collidable_entity->position.x);
             float x_overlap = fabs(x_distance - (width / 2.0f) - (collidable_entity->width / 2.0f));

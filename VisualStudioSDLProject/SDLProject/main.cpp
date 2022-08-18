@@ -3,7 +3,8 @@
 #define FIXED_TIMESTEP 0.0166666f
 #define LEVEL1_WIDTH 14
 #define LEVEL1_HEIGHT 8
-#define LEVEL1_LEFT_EDGE 5.0f
+#define LEVEL1_LEFT_EDGE 4.5f
+#define LEVEL1_RIGHT_EDGE 8.5f
 
 #ifdef _WINDOWS
 #include <GL/glew.h>
@@ -28,16 +29,20 @@
 #include "sceneC.h"
 #include "sceneD.h"
 #include "sceneE.h"
-
+#include "sceneF.h"
+#include "sceneG.h"
+#include "sceneH.h"
 #include "sceneI.h"
+#include "sceneJ.h"
 
 
 
 /**
  CONSTANTS
+ 640 480
  */
-const int WINDOW_WIDTH  = 640,
-          WINDOW_HEIGHT = 480;
+const int WINDOW_WIDTH  = 1280,
+          WINDOW_HEIGHT = 960;
 
 const float BG_RED     = 0.502f,
             BG_BLUE    = 0.502f,
@@ -63,8 +68,11 @@ sceneB* scene_b;
 sceneC* scene_c;
 sceneD* scene_d;
 sceneE* scene_e;
-
+sceneF* scene_f;
+sceneG* scene_g;
+sceneH* scene_h;
 sceneI* scene_i;
+sceneJ* scene_j;
 
 
 SDL_Window* display_window;
@@ -79,7 +87,7 @@ float accumulator = 0.0f;
 void switch_to_scene(Scene *scene, int decision=0)
 {
     current_scene = scene;
-    current_scene->initialise();
+     current_scene->initialise();
     if (decision) current_scene->decision = decision;
 }
 
@@ -117,8 +125,11 @@ void initialise()
     scene_c = new sceneC();
     scene_d = new sceneD();
     scene_e = new sceneE();
-
+    scene_f = new sceneF();
+    scene_g = new sceneG();
+    scene_h = new sceneH();
     scene_i = new sceneI();
+    scene_j = new sceneJ();
 
     switch_to_scene(scene_a);
     
@@ -152,7 +163,9 @@ void process_input()
                     case SDLK_j:
                         // Attack (direction depends on movement)
                         current_scene->state.player->is_attacking = true;
+                        current_scene->state.player->is_attacking_index = true;
                         current_scene->state.player->animation_index = 0;
+                        current_scene->state.player->animation_indices = current_scene->state.player->attacking[current_scene->state.player->RIGHT];
                         break;
                     case SDLK_RETURN: // ADDITION: better advancement system
                         switch (current_scene->next_scene_id) {
@@ -163,7 +176,7 @@ void process_input()
                             switch_to_scene(scene_e);
                             break;
                         case 7:
-                            //switch_to_scene(scene_h);
+                            switch_to_scene(scene_h, current_scene->decision);
                             break;
                         default:
                             break;
@@ -171,12 +184,16 @@ void process_input()
                     case SDLK_y:
                         if (current_scene->cutscene && current_scene->next_scene_id == 5 && current_scene->dialogue_count==2) {
                             switch_to_scene(scene_i,1);
+                            break;
                         }
                         break;
                     case SDLK_SPACE:
                         if (current_scene->cutscene) current_scene->dialogue_count--;
                         break;
-
+                    case SDLK_LSHIFT:
+                        if (current_scene->state.player->speed != 5.0f) current_scene->state.player->speed = 5.0f;
+                        else current_scene->state.player->speed = 2.0f;
+                        break;
                     default:
                         break;
                 }
@@ -188,6 +205,7 @@ void process_input()
     
     const Uint8 *key_state = SDL_GetKeyboardState(NULL);
 
+
     if (key_state[SDL_SCANCODE_A])
     {
         current_scene->state.player->movement.x = -1.0f;
@@ -196,6 +214,7 @@ void process_input()
         // ADDITION: diagnal attacks needs to be fixed - orientation
 
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
+        if (current_scene->state.player->is_attacking_index) current_scene->state.player->animation_indices = current_scene->state.player->attacking[current_scene->state.player->LEFT];
     }
     else if (key_state[SDL_SCANCODE_D])
     {
@@ -204,7 +223,7 @@ void process_input()
         current_scene->state.player->orientation.y = 0.0f;
 
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->RIGHT];
-        if (current_scene->state.player->is_attacking) current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
+        if (current_scene->state.player->is_attacking_index) current_scene->state.player->animation_indices = current_scene->state.player->attacking[current_scene->state.player->RIGHT];
     }
 
     if (key_state[SDL_SCANCODE_W])
@@ -214,6 +233,7 @@ void process_input()
         current_scene->state.player->orientation.y = 1.0f;
 
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->UP];
+        if (current_scene->state.player->is_attacking_index) current_scene->state.player->animation_indices = current_scene->state.player->attacking[current_scene->state.player->UP];
     }
     else if (key_state[SDL_SCANCODE_S])
     {
@@ -222,6 +242,7 @@ void process_input()
         current_scene->state.player->orientation.y = -1.0f;
 
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->DOWN];
+        if (current_scene->state.player->is_attacking_index) current_scene->state.player->animation_indices = current_scene->state.player->attacking[current_scene->state.player->DOWN];
     }
     
     if (glm::length(current_scene->state.player->movement) > 1.0f)
@@ -263,11 +284,18 @@ void update()
     // Prevent the camera from showing anything outside of the "edge" of the level
     view_matrix = glm::mat4(1.0f);
     
-    if (current_scene->state.player->get_position().x > LEVEL1_LEFT_EDGE) {
-        view_matrix = glm::translate(view_matrix, glm::vec3(-current_scene->state.player->get_position().x, 3.75, 0));
-    } else {
-        view_matrix = glm::translate(view_matrix, glm::vec3(-5, 3.75, 0));
+    if (current_scene->state.player->get_position().x > LEVEL1_LEFT_EDGE && current_scene->state.player->get_position().x < LEVEL1_RIGHT_EDGE) {
+        view_matrix = glm::translate(view_matrix, glm::vec3(-current_scene->state.player->get_position().x, 3.5, 0));
+    } 
+    else if (current_scene->state.player->get_position().x <= LEVEL1_LEFT_EDGE) {
+        view_matrix = glm::translate(view_matrix, glm::vec3(-4.5, 3.5, 0));
     }
+    else if (current_scene->state.player->get_position().x >= LEVEL1_RIGHT_EDGE)
+    {
+        view_matrix = glm::translate(view_matrix, glm::vec3(-8.5, 3.5, 0));
+    }
+    // Death
+    if (current_scene->state.player->get_health() <= 0) switch_to_scene(scene_j);
 }
 
 void render()
@@ -277,6 +305,7 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT);
     
     current_scene->render(&program);
+
     if (current_scene->completed)
     {
         switch (current_scene->next_scene_id) {
@@ -287,13 +316,13 @@ void render()
             switch_to_scene(scene_d);
             break;
         case 5:
-            //switch_to_scene(scene_f);
+            switch_to_scene(scene_f);
             break;
         case 6:
-            //switch_to_scene(scene_g);
+            switch_to_scene(scene_g, current_scene->decision);
             break;
         case 8:
-            //switch_to_scene(scene_i);
+            switch_to_scene(scene_i, current_scene->decision);
             break;
         }
     }
@@ -310,8 +339,11 @@ void shutdown()
     delete scene_c;
     delete scene_d;
     delete scene_e;
-
+    delete scene_f;
+    delete scene_g;
+    delete scene_h;
     delete scene_i;
+    delete scene_j;
 
 }
 

@@ -7,14 +7,14 @@
 
 unsigned int sceneC_DATA[] =
 {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    1, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 2,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 2,
+    1, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 2,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
 };
 
 sceneC::~sceneC()
@@ -32,8 +32,8 @@ void sceneC::initialise()
     next_scene_id = 3; //scene_d, end of dialogue
 
 
-    GLuint map_texture_id = Utility::load_texture("assets/tileset.png");
-    this->state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, sceneC_DATA, map_texture_id, 1.0f, 4, 1);
+    GLuint map_texture_id = Utility::load_texture("assets/sceneC_tiles.png");
+    this->state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, sceneC_DATA, map_texture_id, 1.0f, 7, 1);
 
     // Code from main.cpp's initialise()
     /**
@@ -47,20 +47,25 @@ void sceneC::initialise()
     state.player->set_orientation(glm::vec3(1.0f, 0.0f, 0.0f));
     state.player->speed = 2.5f;
     state.player->set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
-    state.player->texture_id = Utility::load_texture("assets/george_0.png");
+    state.player->texture_id = Utility::load_texture("assets/geralt_new.png");
 
     // Walking
     state.player->walking[state.player->LEFT] = new int[4]{ 1, 5, 9,  13 };
     state.player->walking[state.player->RIGHT] = new int[4]{ 3, 7, 11, 15 };
     state.player->walking[state.player->UP] = new int[4]{ 2, 6, 10, 14 };
     state.player->walking[state.player->DOWN] = new int[4]{ 0, 4, 8,  12 };
+    // Attacking
+    state.player->attacking[state.player->LEFT] = new int[4]{ 17, 21, 25, 29 };
+    state.player->attacking[state.player->RIGHT] = new int[4]{ 19, 23, 27, 31 };
+    state.player->attacking[state.player->UP] = new int[4]{ 18, 22, 26, 30 };
+    state.player->attacking[state.player->DOWN] = new int[4]{ 20, 24, 28, 32 };
 
-    state.player->animation_indices = state.player->walking[state.player->RIGHT];  // start George looking left
+    state.player->animation_indices = state.player->walking[state.player->DOWN];  // start George looking left
     state.player->animation_frames = 4;
     state.player->animation_index = 0;
     state.player->animation_time = 0.0f;
     state.player->animation_cols = 4;
-    state.player->animation_rows = 4;
+    state.player->animation_rows = 8;
     state.player->set_height(0.8f);
     state.player->set_width(0.8f);
 
@@ -68,13 +73,13 @@ void sceneC::initialise()
     state.player->set_attack_strength(100);
     state.player->set_attack_range(0.75f);
 
-    GLuint enemy_texture_id = Utility::load_texture("assets/soph.png");
+    GLuint enemy_texture_id = Utility::load_texture("assets/foltest.png");
     state.enemies = new Entity[this->ENEMY_COUNT];
     state.enemies[0].set_entity_type(ENEMY);
     state.enemies[0].set_ai_type(WALKER);
     state.enemies[0].set_ai_state(IDLE);
     state.enemies[0].texture_id = enemy_texture_id;
-    state.enemies[0].set_position(glm::vec3(8.0f, -3.0f, 0.0f));
+    state.enemies[0].set_position(glm::vec3(8.5f, -3.0f, 0.0f));
     state.enemies[0].set_movement(glm::vec3(0.0f));
     state.enemies[0].speed = 1.0f;
     state.enemies[0].set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -85,7 +90,7 @@ void sceneC::initialise()
      */
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 
-    state.bgm = Mix_LoadMUS("assets/dooblydoo.mp3");
+    state.bgm = Mix_LoadMUS("assets/eve.mp3");
     Mix_PlayMusic(state.bgm, -1);
     Mix_VolumeMusic(4.0f);
 }
@@ -117,16 +122,17 @@ void sceneC::render(ShaderProgram* program)
                 Utility::draw_text(program, "in CURING the beast", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
                 break;
             case 4:
-                Utility::draw_text(program, "who is actually", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
+                Utility::draw_text(program, "who is actually my daughter", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
                 break;
             case 3:
-                Utility::draw_text(program, "my daughter", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
+                Utility::draw_text(program, "weaken it, sleep in the coffin", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
                 break;
             case 2:
                 Utility::draw_text(program, "the reward is 3000 orens", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
                 break;
             case 1:
                 Utility::draw_text(program, "given you DONOT kill", 0.75f, -0.45f, glm::vec3(3.75f, -5.0f, 0.0f));
+                break;
             case 0:
                 cutscene = false;
                 completed = true;

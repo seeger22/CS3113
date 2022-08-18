@@ -2,8 +2,8 @@
 #include "Map.h"
 
 enum EntityType { PLATFORM, PLAYER, ENEMY };
-enum AIType     { WALKER, GUARD            };
-enum AIState    { WALKING, IDLE, ATTACKING };
+enum AIType     { WALKER, GUARD, STRIGA           };
+enum AIState    { WALKING, IDLE, ATTACKING, BACK_AWAY, WEAK, ENRAGED };
 
 class Entity
 {
@@ -17,6 +17,11 @@ private:
     int *animation_left  = NULL; // move to the left
     int *animation_up    = NULL; // move upwards
     int *animation_down  = NULL; // move downwards
+
+    int* attacking_left = NULL;
+    int* attacking_right = NULL;
+    int* attacking_up = NULL;
+    int* attacking_down = NULL;
     
     glm::vec3 position;
     glm::vec3 velocity;
@@ -47,6 +52,7 @@ public:
     
     // Animating
     int **walking          = new int*[4] { animation_left, animation_right, animation_up, animation_down };
+    int** attacking = new int* [4]{ attacking_left, attacking_right, attacking_up, attacking_down };
     int *animation_indices = NULL;
     int animation_frames   = 0;
     int animation_index    = 0;
@@ -67,11 +73,13 @@ public:
 
     // Attacking
     bool is_attacking = false;
+    bool is_attacking_index = false;
     float attack_range = 0.25f;
     int attack_frame = 0;
 
     // NPC stuff
     bool hostile = true;
+    bool invincible = false;
     bool speaking = false; // ADDITION: need better way to distinguish this
 
     // Decisions
@@ -92,6 +100,7 @@ public:
     void activate_ai(Entity *player);
     void ai_walker();
     void ai_guard(Entity *player);
+    void ai_striga(Entity* player);
 
     // Damage related
     void take_damage(int damage_amount);

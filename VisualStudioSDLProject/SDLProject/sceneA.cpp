@@ -44,20 +44,25 @@ void sceneA::initialise()
     state.player->set_orientation(glm::vec3(1.0f, 0.0f, 0.0f));
     state.player->speed = 2.5f;
     state.player->set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
-    state.player->texture_id = Utility::load_texture("assets/george_0.png");
+    state.player->texture_id = Utility::load_texture("assets/geralt_new.png");
 
     // Walking
     state.player->walking[state.player->LEFT] = new int[4]{ 1, 5, 9,  13 };
     state.player->walking[state.player->RIGHT] = new int[4]{ 3, 7, 11, 15 };
     state.player->walking[state.player->UP] = new int[4]{ 2, 6, 10, 14 };
     state.player->walking[state.player->DOWN] = new int[4]{ 0, 4, 8,  12 };
+    // Attacking
+    state.player->attacking[state.player->LEFT] = new int[4]{ 17, 21, 25, 29 };
+    state.player->attacking[state.player->RIGHT] = new int[4]{ 19, 23, 27, 31 };
+    state.player->attacking[state.player->UP] = new int[4]{ 18, 22, 26, 30 };
+    state.player->attacking[state.player->DOWN] = new int[4]{ 20, 24, 28, 32 };
 
-    state.player->animation_indices = state.player->walking[state.player->RIGHT];  // start George looking left
+    state.player->animation_indices = state.player->walking[state.player->DOWN];  // start George looking left
     state.player->animation_frames = 4;
     state.player->animation_index = 0;
     state.player->animation_time = 0.0f;
     state.player->animation_cols = 4;
-    state.player->animation_rows = 4;
+    state.player->animation_rows = 8;
     state.player->set_height(0.8f);
     state.player->set_width(0.8f);
 
@@ -71,7 +76,7 @@ void sceneA::initialise()
      */
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 
-    state.bgm = Mix_LoadMUS("assets/dooblydoo.mp3");
+    state.bgm = Mix_LoadMUS("assets/hos.mp3");
     Mix_PlayMusic(state.bgm, -1);
     Mix_VolumeMusic(4.0f);
 }

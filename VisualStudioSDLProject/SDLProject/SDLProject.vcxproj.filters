@@ -60,6 +60,18 @@
     <ClCompile Include="sceneI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sceneJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderProgram.h">
@@ -99,6 +111,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sceneI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneJ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
